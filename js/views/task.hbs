@@ -1,0 +1,190 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.56.0/mode/clike/clike.min.js"></script>
+
+
+<script src="../plugin/ot/ot.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+
+<link href = "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.56.0/codemirror.min.css" rel='stylesheet'/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.56.0/theme/monokai.min.css" rel='stylesheet' />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.56.0/theme/abcdef.min.css" rel='stylesheet' />
+<link src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/addon/fold/foldcode.js" rel = 'stylesheet' />
+<link src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/addon/fold/brace-fold.min.js" rel = 'stylesheet' />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.56.0/theme/material-palenight.min.css" rel='stylesheet' />
+
+
+<div class="container">
+    <p class="">
+     
+    </p>
+
+</div>
+
+<div class = "container-fluid">
+    {{!-- <div id="name"   >{{user.name}}</div> --}}
+    
+    <div class="row high">
+        <div class="col-md-12">
+            <textarea id="code-screen">{{content}}</textarea>
+        </div>
+        <div class="col-md-4" id="chatbox">
+
+            <div class="panel panel-primary ">
+                
+                {{!-- <div id="video-container">
+                    <video autoplay id="second-video"></video>
+                    <video autoplay id="my-video" muted="true"></video>
+                    <div id="step2">
+                        <p>Your ID: <span id="my-id">...</span></p>
+                        <div class="form-inline">
+                            <input type="text" class="form-control" placeholder="Cal User Id ..." id="callto-id">
+                            <a href="" class="btn btn-sm btn-success" id="make-call">Call</a>
+                        </div>
+                    </div>
+
+                    <div id="step3">
+                        <p>Talk To <span id="second-id">...</span>
+                            <a href="#" id="end-call" class="btn btn-sm btn-danger">End Call</a>
+                        </p>
+                    </div>
+                </div> --}}
+
+
+
+             
+
+<input type="hidden" value="{{roomID}}" id="roomID">
+<input type="hidden" value="{{user.name}}" id="user" >
+
+<script>
+    var EditorClient = ot.EditorClient;
+    var SocketIOAdapter = ot.SocketIOAdapter;
+    var CodeMirrorAdapter = ot.CodeMirrorAdapter;
+
+
+   
+   var socket = io.connect('http://localhost:3000/'); 
+
+    var editor = CodeMirror.fromTextArea(document.getElementById("code-screen"), {
+        lineNumbers: true,
+        mode: "text/x-c++src",
+        theme: "material-palenight",
+        readOnly: false
+        
+    });
+
+    var code = $('#code-screen').val();
+//    console.log(code);
+
+
+    var cmClient;
+    function init(str, revision, clients, serverAdapter) {
+        if (!code) {
+            editor.setValue(str);
+        }
+
+        cmClient = window.cmClient = new EditorClient(revision, clients, serverAdapter, new CodeMirrorAdapter(editor))
+    }
+
+    socket.on('doc', function (obj) {
+        init(obj.str, obj.revision, obj.clients, new SocketIOAdapter(socket));
+    });
+
+    var username = $("#user").val().toString();
+    
+    console.log(username);
+    if (username === '') {
+        var userId = Math.floor(Math.random() * 9999).toString();
+        username = "User" + userId;
+        $("#chatbox-username").text(username);
+    }
+
+    var roomID = $('#roomID').val();
+    socket.emit('joinRoom', { room: roomID, username: username });
+
+    var userMessage = function (name, text) {
+        return ('<li class="media" ><div class="media-body"> <div class="media">'
+            + '<div class="media-body">' + '<b>' + name + '</b> : ' + text + '<hr/> </div></div></div> </li>'
+        );
+    };
+    function encode(str) {
+            return btoa(unescape(encodeURIComponent(str || "")));
+        }
+
+        function decode(bytes) {
+            var escaped = escape(atob(bytes || ""));
+            try {
+                return decodeURIComponent(escaped);
+            } catch {
+                return unescape(escaped);
+            }
+        }
+
+    var compileandrun = function(){
+
+        var code = editor.getValue();
+        var input = $('#code-input').val();
+        {{!-- console.log(code); --}}
+        {{!-- console.log($("#compile-btn").html()); --}}
+        $("#compile-btn").html("Processing......")
+        $("#compile-btn").removeClass("btn-success");
+        $("#compile-btn").addClass("btn-dark");
+
+        var pathname = window.location.pathname; // Returns path only (/path/example.html
+         $.ajax({
+                    url: pathname,
+                    type: 'POST',
+                    cache: false,
+                    data: { code : code, input: input },
+                    success: function (data) 
+                    {
+                        if(data.error)
+                        {
+                            console.log("printing error");
+                            $('#error').html(data.error);
+                        }
+                        else
+                        {
+                            console.log("reponse aaya bhai");
+                            
+                            $('#code-outpu').html(data.stdout);
+                            $("#compile-btn").html("Compile and Run")
+                            $("#compile-btn").removeClass("btn-dark");
+                            $("#compile-btn").removeClass("btn-danger");
+                            $("#compile-btn").addClass("btn-success");
+                            {{!-- $("#code-output").css({ "visiblity": "visible" }); --}}
+                            
+
+                        }
+
+                    },
+                    timeout : 12000,  //Req expire after 12 Seconds and Button Changes to retry.
+                    error: function(data){
+                        console.log(data);
+                        $("#compile-btn").removeClass("btn-dark");
+                        $("#compile-btn").addClass("btn-danger");
+                        $('#compile-btn').html("Retry");
+                    }
+                    {{!-- , error: function (jqXHR, textStatus, err) {
+                        alert('text status ' + textStatus + ', err ' + err)
+                    } --}}
+                });
+
+            code = "pssasa";
+                       
+
+    }
+
+    var sendMessage = function () {
+        var userMessage = $('#userMessage').val();
+        socket.emit('chatMessage', { message: userMessage, username: username });
+        $('#userMessage').val("");
+    };
+
+    socket.on('chatMessage', function (data) {
+        $('#chatbox-listMessages').append(userMessage(data.username, data.message));
+    })
+</script>
