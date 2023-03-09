@@ -1,0 +1,172 @@
+@font-face {
+    font-family: 'Helvetica Neue';
+    font-style: normal;
+    font-weight: 1500;
+    src: local('Helvetica Neue'), local('HelveticaNeue'), url(http://themes.googleusercontent.com/licensed/font?kit=Lx1xfUTR4qFjwg0Z_pb900DGSpWewu0sZH-jqLz8Q00) format('truetype');
+}
+
+@font-face {
+    font-family: 'Merriweather';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Merriweather'), url(http://themes.googleusercontent.com/static/fonts/merriweather/v5/RFda8w1V0eDZheqfcyQ4EInF5uFdDttMLvmWuJdhhgs.ttf) format('truetype');
+}
+
+.header{
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    left: 37.5%;
+    top: 0%;
+    
+    color: #FFFFFF;
+    
+    font-family: Merriweather;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 80px;
+    line-height: 101px;
+}
+
+.login{
+    position: absolute;
+    width: 10%;
+    height: 50%;
+    left: 85%;
+    top: 5%;
+}
+
+.row{
+    display: flex;
+}
+
+.row div{
+    margin: 20%;
+}
+
+.column{
+    position: absolute;
+    width: 0%;
+    height: 50%;
+    top: 12.5%;
+}
+
+#col1{
+    left: -14.5%;
+    font-family: 'Helvetica Neue';
+    font-style: normal;
+    font-weight: 1500;
+}
+
+#col2{
+    left: 18.25%;
+    font-family: 'Helvetica Neue';
+    font-style: normal;
+    font-weight: 1500;
+}
+
+#col3{
+    left: 50.5%;
+    font-family: 'Helvetica Neue';
+    font-style: normal;
+    font-weight: 1500;
+}
+
+.container {
+    display: table;
+    
+    margin-top: 26.5%;
+    
+    width: max-content;
+    
+  }
+  
+span{
+    padding: 10%;
+    padding-left: 14.23%;
+}
+
+.but2{
+    border-radius: 20px;
+    
+    border: none;
+    background-color: whitesmoke;
+    font-family: 'Helvetica Neue';
+    font-style: normal;
+    font-weight: 1500;
+}
+
+.editor {
+    display: flex;
+}
+
+.editor div{
+    margin: 20%;
+}
+
+.texta{
+    position: absolute;
+    width: 25%;
+    height: 50%;
+    top: 67.5%;
+}
+
+#html-code{
+    left: 5%;
+}
+
+#css-code{
+    left: 37.5%;
+}
+
+#js-code{
+    left: 70%;
+}
+
+#text{
+    position: absolute;
+    color: white;
+    width: 30%;
+    height: 75%;
+    font-family: 'Helvetica Neue';
+    font-style: normal;
+    font-weight: 1500;
+    top: 125%;
+    left: 45%;
+}
+
+.answer{
+    position: absolute;
+    width: 100%;
+    height: 65%;
+    top: 135%;
+}
+
+.button{
+    position: absolute;
+    width: 25%;
+    height: 5%;
+    top: 202.5%;
+    left: 2.5%;
+    padding-bottom: 3%;
+}
+
+.button1{
+    position: absolute;
+    width: 25%;
+    height: 5%;
+    left: 15%;
+    top: 202.5%;
+    padding-bottom: 3%;
+}
+
+.but1{
+    border-radius: 20px;
+    width: 35%;
+    border: none;
+    background-color: whitesmoke;
+    font-family: 'Helvetica Neue';
+    font-style: normal;
+    font-weight: 1500;
+}
+
